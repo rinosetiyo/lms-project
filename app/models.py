@@ -38,8 +38,4 @@ class Pembayaran(models.Model):
     jumlah_pembayaran = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     jumlah_angsuran = models.IntegerField()
     besar_angsuran = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    tanggal_jatuh_tempo = models.DateField(null=True, blank=True)
     tanggal_pembayaran = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.jumlah_pembayaran} - {self.jumlah_angsuran}'

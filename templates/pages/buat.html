@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{% url "buat_pembayaran" %}" method="post">
+        {% csrf_token %}
+        <label for="jumlah_pembayaran">Jumlah Pembayaran</label>
+        <input type="text" id="jumlah_pembayaran" name="jumlah_pembayaran">
+        <label for="jumlah_angsuran">Jumlah Angsuran</label>
+        <input type="text" id="jumlah_angsuran" name="jumlah_angsuran">
+        <label for="tanggal_pembayaran">Tanggal Pembayaran</label>
+        <input type="date" id="tanggal_pembayaran" name="tanggal_pembayaran">
+        <button class="btn btn-primary" type="submit">Bayar Angsuran</button>
+    </form>
+</body>
+</html>

@@ -9,29 +9,31 @@ def buat_pembayaran(request):
         # Ambil data dari form
         jumlah_pembayaran = request.POST['jumlah_pembayaran']
         jumlah_angsuran = request.POST['jumlah_angsuran']
-        besar_angsuran = jumlah_pembayaran / jumlah_angsuran
-        tanggal_jatuh_tempo = request.POST['tanggal_jatuh_tempo']
+        besar_angsuran = int(jumlah_pembayaran) / int(jumlah_angsuran)
+        tanggal_pembayaran = request.POST['tanggal_pembayaran']
 
         # Buat pembayaran baru
         pembayaran = Pembayaran(
             jumlah_pembayaran=jumlah_pembayaran,
             jumlah_angsuran=jumlah_angsuran,
             besar_angsuran=besar_angsuran,
-            tanggal_jatuh_tempo=tanggal_jatuh_tempo,
+            tanggal_pembayaran=tanggal_pembayaran,
         )
         pembayaran.save()
 
         # Kembalikan ke halaman pembayaran
-        return redirect('pembayaran')
-    return render(request, 'pembayaran/buat.html')
+        return redirect('index')
+    return render(request, 'pages/buat.html')
 
 # Fungsi untuk melihat daftar pembayaran
 def daftar_pembayaran(request):
     # Cari semua pembayaran
     pembayaran = Pembayaran.objects.all()
-
+    context = {
+        'pembayaran': pembayaran,
+    }
     # Render template
-    return render(request, 'pembayaran/daftar.html', {'pembayaran': pembayaran})
+    return render(request, 'pages/index.html', context)
 
 # Fungsi untuk membayar angsuran
 def bayar_angsuran(request, pk):
@@ -43,7 +45,7 @@ def bayar_angsuran(request, pk):
     pembayaran.save()
 
     # Kembalikan ke halaman pembayaran
-    return redirect('pembayaran')
+    return redirect('index')
 
 def index(request):
     semua_tugas = Tugas.objects.all()
