@@ -9,7 +9,7 @@ def buat_pembayaran(request):
         # Ambil data dari form
         jumlah_pembayaran = request.POST['jumlah_pembayaran']
         jumlah_angsuran = request.POST['jumlah_angsuran']
-        besar_angsuran = int(jumlah_pembayaran) / int(jumlah_angsuran)
+        besar_angsuran = jumlah_pembayaran / jumlah_angsuran
         tanggal_pembayaran = request.POST['tanggal_pembayaran']
 
         # Buat pembayaran baru
@@ -25,16 +25,6 @@ def buat_pembayaran(request):
         return redirect('index')
     return render(request, 'pages/buat.html')
 
-# Fungsi untuk melihat daftar pembayaran
-def daftar_pembayaran(request):
-    # Cari semua pembayaran
-    pembayaran = Pembayaran.objects.all()
-    context = {
-        'pembayaran': pembayaran,
-    }
-    # Render template
-    return render(request, 'pages/index.html', context)
-
 # Fungsi untuk membayar angsuran
 def bayar_angsuran(request, pk):
     # Cari pembayaran berdasarkan ID
@@ -48,56 +38,13 @@ def bayar_angsuran(request, pk):
     return redirect('index')
 
 def index(request):
+    all_pembayaran = Pembayaran.objects.all().order_by('-tanggal_pembayaran',)[0:1]
     semua_tugas = Tugas.objects.all()
     jumlah_tugas = semua_tugas.count()
 
     context = {
         'semuaTugas': semua_tugas,
         'jumlah_tugas': jumlah_tugas,
+        'semua_pembayaran': all_pembayaran,
     }
     return render(request, 'pages/index.html', context)
-
-
-# <!DOCTYPE html>
-# <html lang="en">
-# <head>
-#     <meta charset="UTF-8">
-#     <title>Pembayaran</title>
-# </head>
-# <body>
-#     <h1>Pembayaran</h1>
-
-#     {% if request.user.is_authenticated %}
-#         <a href="{% url 'pembayaran:buat' %}">Buat Pembayaran</a>
-#     {% endif %}
-
-#     {% if pembayaran %}
-#         <table>
-#             <tr>
-#                 <th>Jumlah Pembayaran</th>
-#                 <th>Jumlah Angsuran</th>
-#                 <th>Besar Angsuran</th>
-#                 <th>Tanggal Jatuh Tempo</th>
-#                 <th>Tanggal Pembayaran</th>
-#             </tr>
-#             {% for pembayaran in pembayaran %}
-#                 <tr>
-#                     <td>{{ pembayaran.jumlah_pembayaran }}</td>
-#                     <td>{{ pembayaran.jumlah_angsuran }}</td>
-#                     <td>{{ pembayaran.besar_angsuran }}</td>
-#                     <td>{{ pembayaran.tanggal_jatuh_tempo }}</td>
-#                     <td>{{ pembayaran.tanggal_pembayaran }}</td>
-#                 </tr>
-#             {% endfor %}
-#         </table>
-#     {% endif %}
-
-#     {% if request.user.is_authenticated %}
-#         <form action="{% url 'pembayaran:bayar' pk=pembayaran.pk %}" method="post">
-#             {% csrf_token %}
-
-#             <button type="submit">Bayar Angsuran</button>
-#         </form>
-#     {% endif %}
-# </body>
-# </html>

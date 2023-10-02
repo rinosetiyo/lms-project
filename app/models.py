@@ -35,7 +35,7 @@ class Tugas(models.Model):
         return self.judul_tugas
     
 class Pembayaran(models.Model):
-    jumlah_pembayaran = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    jumlah_pembayaran = models.IntegerField(null=True, blank=True)
     jumlah_angsuran = models.IntegerField()
-    besar_angsuran = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    besar_angsuran = models.IntegerField(null=True, blank=True)
     tanggal_pembayaran = models.DateField(null=True, blank=True)
