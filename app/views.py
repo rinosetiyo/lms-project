@@ -1,9 +1,18 @@
-from django.shortcuts import render, redirect
-from app.models import Tugas, Pembayaran
+from django.shortcuts import render, redirect, get_object_or_404
+from app.models import Tugas, Pembayaran, Jadwal
 from django.utils import dates, timezone
 from django.contrib.auth.decorators import login_required
 
 # Fungsi untuk membuat pembayaran baru
+def jadwal(request):
+    jadwals = Jadwal.objects.all().order_by('hari')
+    if jadwals.order_by('pelajaran').exists():
+        print("True")
+    context = {
+        'jadwals':jadwals,
+    }
+    return render(request, 'pages/jadwal.html', context)
+
 def buat_pembayaran(request):
     if request.POST:
         # Ambil data dari form

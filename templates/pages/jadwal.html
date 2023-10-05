@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<body>
+  <div class="container my-4">
+    <div class="row">
+      <h4>Jadwal Pelajaran</h4>
+      <table class="table table-bordered border-1">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Hari</th>
+              <th>Jam</th>
+              <th>Jadwal Tambahan</th>
+              <th>Pelajaran</th>
+              <th>Kelas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for jadwal in jadwals %}
+            <tr>
+              <td>1</td>
+              <td>{{ jadwal.hari | date:"D" }}</td>
+              <td>{{ jadwal.jam | time:"g a" }}</td>
+              <td>{{ jadwal.jadwal_tambahan }}</td>
+              <td>{{ jadwal.pelajaran }}</td>
+              <td>{{ jadwal.kelas }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
+{% endblock content %}
