@@ -1,15 +1,39 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from app.models import Tugas, Pembayaran, Jadwal
+from app.models import Tugas, Pembayaran, Jadwal, Pelajaran, Kelas
 from django.utils import dates, timezone
 from django.contrib.auth.decorators import login_required
 
-# Fungsi untuk membuat pembayaran baru
+
+def buat_jadwal(request):
+    if request.POST:
+        hari = request.POST['hari']
+        jam = request.POST['jam']
+        pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
+        kelas = Kelas.objects.get(nama_kelas = request.POST['kelas'])
+
+        jadwal = Jadwal.objects.create(hari=hari, jam=jam, pelajaran=pelajaran, kelas=kelas,)
+        jadwal.save()
+    return redirect('jadwal')
+
+def perbarui_jadwal(request):
+    if request.POST:
+        hari = request.POST['hari']
+        jam = request.POST['jam']
+        pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
+        kelas = Kelas.objects.get(nama_kelas = request.POST['kelas'])
+
+        jadwal = Jadwal.objects.update(hari=hari, jam=jam, pelajaran=pelajaran, kelas=kelas,)
+        jadwal.save()
+    return redirect('jadwal')
+
 def jadwal(request):
     jadwals = Jadwal.objects.all().order_by('hari')
-    if jadwals.order_by('pelajaran').exists():
-        print("True")
+    pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
+    kelas = Kelas.objects.values_list('nama_kelas', flat=True).distinct()
     context = {
         'jadwals':jadwals,
+        'pelajaran':pelajaran,
+        'kelas':kelas,
     }
     return render(request, 'pages/jadwal.html', context)
 

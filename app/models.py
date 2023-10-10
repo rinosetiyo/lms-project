@@ -45,10 +45,9 @@ class Tugas(models.Model):
 class Jadwal(models.Model):
     hari = models.DateField()
     jam = models.TimeField()
-    jadwal_tambahan = models.CharField(max_length=250, blank=True)
     pelajaran = models.ForeignKey(Pelajaran, on_delete=models.CASCADE, default=False)
     kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE)
-    materi = models.ForeignKey(Materi, on_delete=models.CASCADE)
+    materi = models.ForeignKey(Materi, on_delete=models.CASCADE, blank=True, null=True)
     tugas = models.ForeignKey(Tugas, on_delete=models.CASCADE, blank=True, null=True)
     # nama pengajar
     

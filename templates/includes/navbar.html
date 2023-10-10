@@ -1,0 +1,104 @@
+{% load static %}
+{% load humanize %}
+{% comment %} offcanvas {% endcomment %}
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasExample"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      Some text as placeholder. In real life you can have the elements you have
+      chosen. Like, text, images, lists, etc.
+    </div>
+    <div class="dropdown mt-3">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+      >
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% comment %} navbar {% endcomment %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container-fluid">
+    <a
+      class="btn btn-outline-light me-3"
+      data-bs-toggle="offcanvas"
+      href="#offcanvasExample"
+      role="button"
+      aria-controls="offcanvasExample"
+    >
+      <i class="bi bi-list"></i>
+    </a>
+    <a class="navbar-brand fw-semibold" href="{% url "index" %}">My LMS</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item mx-2">
+          <a class="nav-link active" aria-current="page" href="#"
+            ><i class="bi bi-speedometer fs-4 text-light"></i
+          ></a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="#"
+            ><i class="bi bi-bell-fill fs-4 text-light"></i
+          ></a>
+        </li>
+      </ul>
+      <form action="" class="mx-2">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control rounded-start-pill"
+            placeholder="Search . . ."
+            aria-label="Recipient's username"
+            aria-describedby="button-addon2"
+          />
+          <button
+            class="btn btn-outline-light rounded-end-pill bi bi-search"
+            type="button"
+            id="button-addon2"
+          ></button>
+        </div>
+      </form>
+      <form class="d-flex">
+        <a href="#" class="text-decoration-none"
+          ><img
+            src="{% static 'images/admin.jpg' %}"
+            alt=""
+            class="img-thumbnail rounded-circle"
+            style="width: 3rem"
+        /></a>
+      </form>
+    </div>
+  </div>
+</nav>
