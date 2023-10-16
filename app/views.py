@@ -26,6 +26,11 @@ def perbarui_jadwal(request):
         jadwal.save()
     return redirect('jadwal')
 
+def hapus_jadwal(request, jadwal_id):
+    jadwals = get_object_or_404(Jadwal, id=jadwal_id)
+    jadwals.delete
+    return redirect('jadwal')
+
 def jadwal(request):
     jadwals = Jadwal.objects.all().order_by('hari')
     pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
