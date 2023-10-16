@@ -3,7 +3,16 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Profile(models.Model):
+    nama = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='photos/profiles/%Y/%m/%d', blank=True, null=True)
+    is_user = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_pengajar = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.nama.first_name
+    
 class Kelas(models.Model):
     nama_kelas = models.CharField(max_length=200)
     deskripsi = models.TextField()
@@ -22,6 +31,7 @@ class Materi(models.Model):
     judul_materi = models.CharField(max_length=200)
     deskripsi = models.TextField()
     pelajaran = models.ForeignKey(Pelajaran, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='document/pdfs/%Y/%m/%d', blank=True, null=True)
 
     def __str__(self):
         return self.judul_materi

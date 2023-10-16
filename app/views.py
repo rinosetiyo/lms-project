@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from app.models import Tugas, Pembayaran, Jadwal, Pelajaran, Kelas
+from app.models import Tugas, Pembayaran, Jadwal, Pelajaran, Kelas, Materi
 from django.utils import dates, timezone
 from django.contrib.auth.decorators import login_required
 
@@ -11,24 +11,28 @@ def buat_jadwal(request):
         pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
         kelas = Kelas.objects.get(nama_kelas = request.POST['kelas'])
 
-        jadwal = Jadwal.objects.create(hari=hari, jam=jam, pelajaran=pelajaran, kelas=kelas,)
+        jadwal = Jadwal(hari=hari, jam=jam, pelajaran=pelajaran, kelas=kelas,)
         jadwal.save()
     return redirect('jadwal')
 
-def perbarui_jadwal(request):
+def perbarui_jadwal(request, jadwal_id):
+    jadwal = Jadwal.objects.get(id=jadwal_id)
     if request.POST:
         hari = request.POST['hari']
         jam = request.POST['jam']
         pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
         kelas = Kelas.objects.get(nama_kelas = request.POST['kelas'])
 
-        jadwal = Jadwal.objects.update(hari=hari, jam=jam, pelajaran=pelajaran, kelas=kelas,)
+        jadwal.hari = hari
+        jadwal.jam = jam
+        jadwal.pelajaran = pelajaran
+        jadwal.kelas = kelas
         jadwal.save()
     return redirect('jadwal')
 
 def hapus_jadwal(request, jadwal_id):
-    jadwals = get_object_or_404(Jadwal, id=jadwal_id)
-    jadwals.delete
+    jadwals = Jadwal.objects.get(id=jadwal_id)
+    jadwals.delete()
     return redirect('jadwal')
 
 def jadwal(request):
@@ -41,6 +45,15 @@ def jadwal(request):
         'kelas':kelas,
     }
     return render(request, 'pages/jadwal.html', context)
+
+def materi(request):
+    materis = Materi.objects.all()
+    pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
+    context = {
+        'materis':materis,
+        'pelajaran':pelajaran,
+    }
+    return render(request, 'pages/materi.html', context)
 
 def buat_pembayaran(request):
     if request.POST:

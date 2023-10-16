@@ -1,0 +1,122 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %}
+  <div class="container my-4">
+    <div class="row">
+      <h4>Materi Pelajaran</h4>
+      <div class="d-flex my-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postJadwal"><i class="bi bi-plus"></i> Tambah Materi</button>
+      </div>
+      <table class="table table-bordered border-1">
+        <thead>
+          <tr>
+            <th>Judul Materi</th>
+            <th>Pelajaran</th>
+            <th>File</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for materi in materis %}
+            <tr>
+                <td>{{ materi.judul_materi }}</td>
+                <td>{{ materi.pelajaran }}</td>
+                <td>{{ materi.file }}</td>
+              <td>
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#perbarui">Perbarui</a>
+                <a href="" class="btn btn-danger">Hapus</a>
+              </td>
+            </tr>
+
+            <!-- Modal perbarui jadwal -->
+            {% comment %} <div class="modal fade" id="perbarui" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Memperbarui Jadwal</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="" method="post" class="row g-3">
+                      {% csrf_token %}
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label for="hari" class="form-label">Hari</label>
+                          <input type="date" class="form-control" name="hari" id="hari" />
+                        </div>
+                        <div class="col-md-6">
+                          <label for="jam" class="form-label">Jam</label>
+                          <input type="time" class="form-control" name="jam" id="jam" />
+                        </div>
+                        <div class="col-12">
+                          <label for="pelajaran" class="form-label">Pelajaran</label>
+                          <select id="pelajaran" class="form-select" name="pelajaran">
+                            <option selected>{{ jadwal.pelajaran }}</option>
+                            {% for judul_pelajaran in pelajaran %}
+                              <option>{{ judul_pelajaran }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-12">
+                          <label for="kelas" class="form-label">Kelas</label>
+                          <select id="kelas" class="form-select" name="kelas">
+                            <option selected>{{ jadwal.kelas }}</option>
+                            {% for nama_kelas in kelas %}
+                              <option>{{ nama_kelas }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Perbarui Jadwal</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div> {% endcomment %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal membuat jadwal -->
+  <div class="modal fade" id="postJadwal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Materi</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'buat_jadwal' %}" method="post" class="row g-3" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-12">
+              <label for="judul_materi" class="form-label">Jumlah Materi</label>
+              <input type="text" class="form-control" name="judul_materi" id="judul_materi" />
+            </div>
+            <div class="col-12">
+              <label for="pelajaran" class="form-label">Pelajaran</label>
+              <select id="pelajaran" class="form-select" name="pelajaran">
+                <option selected>Pilih</option>
+                {% for judul_pelajaran in pelajaran %}
+                  <option>{{ judul_pelajaran }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="upload_file" class="form-label">Upload File</label>
+              <input type="file" class="form-control" name="upload_file">
+            </div>
+
+            <div class="modal-footer mt-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Tambah Materi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

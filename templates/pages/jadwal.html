@@ -24,7 +24,7 @@
               <td>{{ jadwal.kelas }}</td>
               <td>
                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#perbarui{{ jadwal.id }}">Perbarui</a>
-                <a href="" class="btn btn-danger">Hapus</a>
+                <a href="{% url "hapus_jadwal" jadwal.id %}" class="btn btn-danger">Hapus</a>
               </td>
             </tr>
 
@@ -37,7 +37,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <form action="{% url 'perbarui_jadwal' %}" method="post" class="row g-3">
+                    <form action="{% url 'perbarui_jadwal' jadwal.id %}" method="post" class="row g-3">
                       {% csrf_token %}
                       <div class="row g-3">
                         <div class="col-md-6">
