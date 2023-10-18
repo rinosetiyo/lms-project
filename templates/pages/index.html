@@ -1,18 +1,16 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 {% block content %}
-    <div class="container mt-5">
-      <div class="row g-4">
-        <div class="col-lg-4 col-md-6">
-          <a href="{% url "jadwal" %}" class="text-decoration-none">
+  <div class="container mt-5">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        {% if user.is_authenticated %}
+        <a href="{% url 'jadwal' %}" class="text-decoration-none">
           <div class="card">
             <div class="row g-3">
               <div class="col-4">
-                <i
-                  class="text-center bi bi-calendar3 ps-4 rounded-start text-danger"
-                  style="font-size: 4rem"
-                ></i>
+                <i class="text-center bi bi-calendar3 ps-4 rounded-start text-danger" style="font-size: 4rem"></i>
               </div>
               <div class="col-7">
                 <div class="card-body">
@@ -23,16 +21,30 @@
             </div>
           </div>
         </a>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <a href="{% url "materi" %}" class="text-decoration-none">
+        {% else %}
+        <a href="{% url 'login' %}" class="text-decoration-none">
           <div class="card">
             <div class="row g-3">
               <div class="col-4">
-                <i
-                  class="text-center bi bi-book ps-4 rounded-start text-primary"
-                  style="font-size: 4rem"
-                ></i>
+                <i class="text-center bi bi-calendar3 ps-4 rounded-start text-danger" style="font-size: 4rem"></i>
+              </div>
+              <div class="col-7">
+                <div class="card-body">
+                  <h5 class="card-title fs-3">Jadwal</h5>
+                  <p class="card-text text-muted">Jadwal sekolah</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endif %}
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="{% url 'materi' %}" class="text-decoration-none">
+          <div class="card">
+            <div class="row g-3">
+              <div class="col-4">
+                <i class="text-center bi bi-book ps-4 rounded-start text-primary" style="font-size: 4rem"></i>
               </div>
               <div class="col-7">
                 <div class="card-body">
@@ -42,123 +54,103 @@
               </div>
             </div>
           </div>
-         </a>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card">
-            <div class="row g-3">
-              <div class="col-4">
-                <i
-                  class="text-center bi bi-book ps-4 rounded-start text-primary"
-                  style="font-size: 4rem"
-                ></i>
-              </div>
-              <div class="col-7">
-                <div class="card-body">
-                  <h5 class="card-title fs-3">Materi</h5>
-                  <p class="card-text text-muted">Buku refensi berupa file pdf</p>
-                </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+          <div class="row g-3">
+            <div class="col-4">
+              <i class="text-center bi bi-book ps-4 rounded-start text-primary" style="font-size: 4rem"></i>
+            </div>
+            <div class="col-7">
+              <div class="card-body">
+                <h5 class="card-title fs-3">Materi</h5>
+                <p class="card-text text-muted">Buku refensi berupa file pdf</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="container my-4">
-      <div class="row">
+  <div class="container my-4">
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <a href="#" class="text-decoration-none">
+          <div class="card mb-3 shadow">
+            <div class="row">
+              <div class="col-4">
+                <i class="text-primary bi bi-journal-bookmark-fill rounded-start ps-4" style="font-size: 4rem"></i>
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
+                  <small class="text-muted">Total tugas</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% for pembayaran in semua_pembayaran %}
         <div class="col-lg-3 col-md-6">
           <a href="#" class="text-decoration-none">
             <div class="card mb-3 shadow">
               <div class="row">
                 <div class="col-4">
-                  <i
-                    class="text-primary bi bi-journal-bookmark-fill rounded-start ps-4"
-                    style="font-size: 4rem"
-                  ></i>
+                  <i class="text-success bi bi-cash rounded-start ps-4" style="font-size: 4rem"></i>
                 </div>
                 <div class="col-8">
                   <div class="card-body">
-                    <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
-                    <small class="text-muted">Total tugas</small>
+                    <h5 class="card-title fs-1">{{ pembayaran.besar_angsuran|intcomma }}</h5>
+                    <small class="text-muted"><small>Tanggal pembayaran :</small>{{ pembayaran.tanggal_pembayaran }}</small>
                   </div>
                 </div>
               </div>
             </div>
           </a>
         </div>
-        {% for pembayaran in semua_pembayaran %}
-        <div class="col-lg-3 col-md-6">
-          <a href="#" class="text-decoration-none">
-            <div class="card mb-3 shadow">
-              <div class="row">
-                <div class="col-4">
-                  <i
-                    class="text-success bi bi-cash rounded-start ps-4"
-                    style="font-size: 4rem"
-                  ></i>
-                </div>
-                <div class="col-8">
-                  <div class="card-body">
-                    <h5 class="card-title fs-1">
-                      {{ pembayaran.besar_angsuran | intcomma }}
-                    </h5>
-                    <small class="text-muted"
-                      ><small>Tanggal pembayaran : </small>{{
-                      pembayaran.tanggal_pembayaran }}</small
-                    >
-                  </div>
+      {% endfor %}
+      <div class="col-lg-3 col-md-6">
+        <a href="#" class="text-decoration-none">
+          <div class="card mb-3 shadow">
+            <div class="row">
+              <div class="col-4">
+                <i class="bi bi-cash rounded-start ps-4" style="font-size: 4rem"></i>
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
+                  <small class="text-muted">Total tugas</small>
                 </div>
               </div>
             </div>
-          </a>
-        </div>
-        {% endfor %}
-        <div class="col-lg-3 col-md-6">
-          <a href="#" class="text-decoration-none">
-            <div class="card mb-3 shadow">
-              <div class="row">
-                <div class="col-4">
-                  <i
-                    class="bi bi-cash rounded-start ps-4"
-                    style="font-size: 4rem"
-                  ></i>
-                </div>
-                <div class="col-8">
-                  <div class="card-body">
-                    <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
-                    <small class="text-muted">Total tugas</small>
-                  </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <a href="#" class="text-decoration-none">
+          <div class="card mb-3 shadow">
+            <div class="row">
+              <div class="col-4">
+                <i class="bi bi-cash rounded-start ps-4" style="font-size: 4rem"></i>
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
+                  <small class="text-muted">Total tugas</small>
                 </div>
               </div>
             </div>
-          </a>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <a href="#" class="text-decoration-none">
-            <div class="card mb-3 shadow">
-              <div class="row">
-                <div class="col-4">
-                  <i
-                    class="bi bi-cash rounded-start ps-4"
-                    style="font-size: 4rem"
-                  ></i>
-                </div>
-                <div class="col-8">
-                  <div class="card-body">
-                    <h5 class="card-title fs-1">{{ jumlah_tugas }}</h5>
-                    <small class="text-muted">Total tugas</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
     </div>
+  </div>
 
-    <a href="{% url 'buat_pembayaran' %}">Buat Pembayaran</a>
-    {% if pembayaran %}
+  <a href="{% url 'buat_pembayaran' %}">Buat Pembayaran</a>
+  {% if pembayaran %}
     <table>
       <tr>
         <th>Jumlah Pembayaran</th>
@@ -168,14 +160,14 @@
         <th>Tanggal Pembayaran</th>
       </tr>
       {% for pembayaran in pembayaran %}
-      <tr>
-        <td>{{ pembayaran.jumlah_pembayaran }}</td>
-        <td>{{ pembayaran.jumlah_angsuran }}</td>
-        <td>{{ pembayaran.besar_angsuran }}</td>
-        <td>{{ pembayaran.tanggal_jatuh_tempo }}</td>
-        <td>{{ pembayaran.tanggal_pembayaran }}</td>
-      </tr>
+        <tr>
+          <td>{{ pembayaran.jumlah_pembayaran }}</td>
+          <td>{{ pembayaran.jumlah_angsuran }}</td>
+          <td>{{ pembayaran.besar_angsuran }}</td>
+          <td>{{ pembayaran.tanggal_jatuh_tempo }}</td>
+          <td>{{ pembayaran.tanggal_pembayaran }}</td>
+        </tr>
       {% endfor %}
     </table>
-    {% endif %}
+  {% endif %}
 {% endblock %}

@@ -74,6 +74,33 @@
           ></a>
         </li>
       </ul>
+      
+      <div class="d-flex">
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+          <a href="#" class="text-decoration-none" data-bs-toggle="dropdown"
+          ><img
+            src="{% static 'images/admin.jpg' %}"
+            alt=""
+            class="img-thumbnail rounded-circle"
+            style="width: 2.5rem"
+        /></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li>
+              <form action="{% url "logout" %}" method="post">
+                {% csrf_token %}
+              <button class="dropdown-item" type="submit">Logout</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+        
+        {% else %}
+        <a href="{% url "login" %}" class="btn btn-outline-light">Login</a>
+        {% endif %}
+      </div>
       <form action="" class="mx-2">
         <div class="input-group">
           <input
@@ -89,15 +116,6 @@
             id="button-addon2"
           ></button>
         </div>
-      </form>
-      <form class="d-flex">
-        <a href="#" class="text-decoration-none"
-          ><img
-            src="{% static 'images/admin.jpg' %}"
-            alt=""
-            class="img-thumbnail rounded-circle"
-            style="width: 3rem"
-        /></a>
       </form>
     </div>
   </div>

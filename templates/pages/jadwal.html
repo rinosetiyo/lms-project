@@ -1,133 +1,213 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %}
-  <div class="container my-4">
-    <div class="row">
-      <h4>Jadwal Pelajaran</h4>
-      <div class="d-flex my-3">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postJadwal"><i class="bi bi-plus"></i> Buat Jadwal</button>
-      </div>
-      <table class="table table-bordered border-1">
-        <thead>
-          <tr>
-            <th>Hari</th>
-            <th>Jam</th>
-            <th>Pelajaran</th>
-            <th>Kelas</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for jadwal in jadwals %}
-            <tr>
-              <td>{{ jadwal.hari|date:'l, j M Y' }}</td>
-              <td>{{ jadwal.jam|time:'f a' }}</td>
-              <td>{{ jadwal.pelajaran }}</td>
-              <td>{{ jadwal.kelas }}</td>
-              <td>
-                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#perbarui{{ jadwal.id }}">Perbarui</a>
-                <a href="{% url "hapus_jadwal" jadwal.id %}" class="btn btn-danger">Hapus</a>
-              </td>
-            </tr>
+  {% if user.is_authenticated %}
+    {% if user.profile.is_pengajar %}
+      <div class="container my-4">
+        <div class="row">
+          <h4>Jadwal Pelajaran</h4>
+          <div class="d-flex my-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postJadwal"><i class="bi bi-plus"></i> Buat Jadwal</button>
+          </div>
+          <table class="table table-bordered border-1">
+            <thead>
+              <tr>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Pelajaran</th>
+                <th>Kelas</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jadwal in jadwals %}
+                <tr>
+                  <td>{{ jadwal.hari|date:'l, j M Y' }}</td>
+                  <td>{{ jadwal.jam|time:'f a' }}</td>
+                  <td>{{ jadwal.pelajaran }}</td>
+                  <td>{{ jadwal.kelas }}</td>
+                  <td>
+                    <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#perbarui{{ jadwal.id }}">Perbarui</a>
+                    <a href="{% url 'hapus_jadwal' jadwal.id %}" class="btn btn-danger">Hapus</a>
+                  </td>
+                </tr>
 
-            <!-- Modal perbarui jadwal -->
-            <div class="modal fade" id="perbarui{{ jadwal.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Memperbarui Jadwal</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="{% url 'perbarui_jadwal' jadwal.id %}" method="post" class="row g-3">
-                      {% csrf_token %}
-                      <div class="row g-3">
-                        <div class="col-md-6">
-                          <label for="hari" class="form-label">Hari</label>
-                          <input type="date" class="form-control" name="hari" id="hari" />
-                        </div>
-                        <div class="col-md-6">
-                          <label for="jam" class="form-label">Jam</label>
-                          <input type="time" class="form-control" name="jam" id="jam" />
-                        </div>
-                        <div class="col-12">
-                          <label for="pelajaran" class="form-label">Pelajaran</label>
-                          <select id="pelajaran" class="form-select" name="pelajaran">
-                            <option selected>{{ jadwal.pelajaran }}</option>
-                            {% for judul_pelajaran in pelajaran %}
-                              <option>{{ judul_pelajaran }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="col-12">
-                          <label for="kelas" class="form-label">Kelas</label>
-                          <select id="kelas" class="form-select" name="kelas">
-                            <option selected>{{ jadwal.kelas }}</option>
-                            {% for nama_kelas in kelas %}
-                              <option>{{ nama_kelas }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
+                <!-- Modal perbarui jadwal -->
+                <div class="modal fade" id="perbarui{{ jadwal.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Memperbarui Jadwal</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
+                      <div class="modal-body">
+                        <form action="{% url 'perbarui_jadwal' jadwal.id %}" method="post" class="row g-3">
+                          {% csrf_token %}
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <label for="hari" class="form-label">Hari</label>
+                              <input type="date" class="form-control" name="hari" id="hari" />
+                            </div>
+                            <div class="col-md-6">
+                              <label for="jam" class="form-label">Jam</label>
+                              <input type="time" class="form-control" name="jam" id="jam" />
+                            </div>
+                            <div class="col-12">
+                              <label for="pelajaran" class="form-label">Pelajaran</label>
+                              <select id="pelajaran" class="form-select" name="pelajaran">
+                                <option selected>{{ jadwal.pelajaran }}</option>
+                                {% for judul_pelajaran in pelajaran %}
+                                  <option>{{ judul_pelajaran }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <div class="col-12">
+                              <label for="kelas" class="form-label">Kelas</label>
+                              <select id="kelas" class="form-select" name="kelas">
+                                <option selected>{{ jadwal.kelas }}</option>
+                                {% for nama_kelas in kelas %}
+                                  <option>{{ nama_kelas }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
 
-                      <div class="modal-footer mt-3">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Perbarui Jadwal</button>
+                          <div class="modal-footer mt-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Perbarui Jadwal</button>
+                          </div>
+                        </form>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Modal membuat jadwal -->
-  <div class="modal fade" id="postJadwal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Membuat Jadwal</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="{% url 'buat_jadwal' %}" method="post" class="row g-3">
-            {% csrf_token %}
-            <div class="col-md-6">
-              <label for="hari" class="form-label">Hari</label>
-              <input type="date" class="form-control" name="hari" id="hari" />
-            </div>
-            <div class="col-md-6">
-              <label for="jam" class="form-label">Jam</label>
-              <input type="time" class="form-control" name="jam" id="jam" />
-            </div>
-            <div class="col-12">
-              <label for="pelajaran" class="form-label">Pelajaran</label>
-              <select id="pelajaran" class="form-select" name="pelajaran">
-                <option selected>Pilih</option>
-                {% for judul_pelajaran in pelajaran %}
-                  <option>{{ judul_pelajaran }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="col-12">
-              <label for="kelas" class="form-label">Kelas</label>
-              <select id="kelas" class="form-select" name="kelas">
-                <option selected>Pilih</option>
-                {% for nama_kelas in kelas %}
-                  <option>{{ nama_kelas }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="modal-footer mt-3">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Buat Jadwal</button>
-            </div>
-          </form>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
-  </div>
+
+      <!-- Modal membuat jadwal -->
+      <div class="modal fade" id="postJadwal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Membuat Jadwal</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url 'buat_jadwal' %}" method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                  <label for="hari" class="form-label">Hari</label>
+                  <input type="date" class="form-control" name="hari" id="hari" />
+                </div>
+                <div class="col-md-6">
+                  <label for="jam" class="form-label">Jam</label>
+                  <input type="time" class="form-control" name="jam" id="jam" />
+                </div>
+                <div class="col-12">
+                  <label for="pelajaran" class="form-label">Pelajaran</label>
+                  <select id="pelajaran" class="form-select" name="pelajaran">
+                    <option selected>Pilih</option>
+                    {% for judul_pelajaran in pelajaran %}
+                      <option>{{ judul_pelajaran }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="kelas" class="form-label">Kelas</label>
+                  <select id="kelas" class="form-select" name="kelas">
+                    <option selected>Pilih</option>
+                    {% for nama_kelas in kelas %}
+                      <option>{{ nama_kelas }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="modal-footer mt-3">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Buat Jadwal</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="container my-4">
+        <div class="row">
+          <h4 class="mb-4">Jadwal Pelajaran</h4>
+          <table class="table table-bordered border-1">
+            <thead>
+              <tr>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Pelajaran</th>
+                <th>Kelas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jadwal in jadwals %}
+                <tr>
+                  <td>{{ jadwal.hari|date:'l, j M Y' }}</td>
+                  <td>{{ jadwal.jam|time:'f a' }}</td>
+                  <td>{{ jadwal.pelajaran }}</td>
+                  <td>{{ jadwal.kelas }}</td>
+                </tr>
+
+                <!-- Modal perbarui jadwal -->
+                <div class="modal fade" id="perbarui{{ jadwal.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Memperbarui Jadwal</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{% url 'perbarui_jadwal' jadwal.id %}" method="post" class="row g-3">
+                          {% csrf_token %}
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <label for="hari" class="form-label">Hari</label>
+                              <input type="date" class="form-control" name="hari" id="hari" />
+                            </div>
+                            <div class="col-md-6">
+                              <label for="jam" class="form-label">Jam</label>
+                              <input type="time" class="form-control" name="jam" id="jam" />
+                            </div>
+                            <div class="col-12">
+                              <label for="pelajaran" class="form-label">Pelajaran</label>
+                              <select id="pelajaran" class="form-select" name="pelajaran">
+                                <option selected>{{ jadwal.pelajaran }}</option>
+                                {% for judul_pelajaran in pelajaran %}
+                                  <option>{{ judul_pelajaran }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <div class="col-12">
+                              <label for="kelas" class="form-label">Kelas</label>
+                              <select id="kelas" class="form-select" name="kelas">
+                                <option selected>{{ jadwal.kelas }}</option>
+                                {% for nama_kelas in kelas %}
+                                  <option>{{ nama_kelas }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="modal-footer mt-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Perbarui Jadwal</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
 {% endblock %}

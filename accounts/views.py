@@ -15,7 +15,7 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'you are now logged in. ')
-            return redirect('dashboard')
+            return redirect('index')
         else:
             messages.error(request, 'invalid login credentials')
             return redirect('login')
@@ -51,9 +51,9 @@ def register(request):
     else:
         return render(request, 'accounts/signup.html')
     
-@login_required(login_url = 'login')
-def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+# @login_required(login_url = 'login')
+# def dashboard(request):
+#     return render(request, 'accounts/dashboard.html')
 
 def logout(request):
     if request.POST:
