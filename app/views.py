@@ -3,6 +3,17 @@ from app.models import Tugas, Pembayaran, Jadwal, Pelajaran, Kelas, Materi
 from django.utils import dates, timezone
 from django.contrib.auth.decorators import login_required
 
+@login_required(login_url= 'login')
+def jadwal(request):
+    jadwals = Jadwal.objects.all().order_by('hari')
+    pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
+    kelas = Kelas.objects.values_list('nama_kelas', flat=True).distinct()
+    context = {
+        'jadwals':jadwals,
+        'pelajaran':pelajaran,
+        'kelas':kelas,
+    }
+    return render(request, 'pages/jadwal.html', context)
 
 def buat_jadwal(request):
     if request.POST:
@@ -35,17 +46,7 @@ def hapus_jadwal(request, jadwal_id):
     jadwals.delete()
     return redirect('jadwal')
 
-def jadwal(request):
-    jadwals = Jadwal.objects.all().order_by('hari')
-    pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
-    kelas = Kelas.objects.values_list('nama_kelas', flat=True).distinct()
-    context = {
-        'jadwals':jadwals,
-        'pelajaran':pelajaran,
-        'kelas':kelas,
-    }
-    return render(request, 'pages/jadwal.html', context)
-
+@login_required(login_url='login')
 def materi(request):
     materis = Materi.objects.all()
     pelajaran = Pelajaran.objects.values_list('judul_pelajaran', flat=True).distinct()
@@ -54,6 +55,37 @@ def materi(request):
         'pelajaran':pelajaran,
     }
     return render(request, 'pages/materi.html', context)
+
+def buat_materi(request):
+    if request.POST:
+        judul = request.POST['judul_materi']
+        deskripsi = request.POST['deskripsi']
+        pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
+        file = request.FILES['upload_file']
+
+        materi = Materi(judul_materi=judul, deskripsi=deskripsi, pelajaran=pelajaran, file=file,)
+        materi.save()
+    return redirect('materi')
+
+def perbarui_materi(request, materi_id):
+    materi = Materi.objects.get(id=materi_id)
+    if request.POST:
+        judul = request.POST['judul_materi']
+        deskripsi = request.POST['deskripsi']
+        pelajaran = Pelajaran.objects.get(judul_pelajaran = request.POST['pelajaran'])
+        file = request.FILES['upload_file']
+
+        materi.judul_materi = judul
+        materi.deskripsi = deskripsi
+        materi.pelajaran = pelajaran
+        materi.file = file
+        materi.save()
+    return redirect('materi')
+
+def hapus_materi(request, materi_id):
+    materi = Materi.objects.get(id=materi_id)
+    materi.delete()
+    return redirect('materi')
 
 def buat_pembayaran(request):
     if request.POST:
